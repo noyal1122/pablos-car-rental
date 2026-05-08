@@ -354,8 +354,8 @@ def api_reviews_add():
         session['guest_id'] = user_id
         
     g.db.execute('''
-        INSERT INTO reviews (user_id, rating, content) VALUES (?, ?, ?)
-    ''', (user_id, rating, content))
+        INSERT INTO reviews (user_id, rating, content, timestamp) VALUES (?, ?, ?, ?)
+    ''', (user_id, rating, content, get_corrected_time_str()))
     g.db.commit()
     
     return jsonify({'success': True})
