@@ -2,12 +2,12 @@
 {% block title %}Admin Dashboard - Pablo's Rentals{% endblock %}
 
 {% block content %}
-<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+<div class="header-group" style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h1>Admin Dashboard</h1>
         <p>Manage fleet, view bookings, and reply to customer inquiries.</p>
     </div>
-    <div style="display: flex; gap: 1rem;">
+    <div class="btn-group" style="display: flex; gap: 1rem;">
         <a href="{{ url_for('admin_ledger') }}" class="btn btn-outline" style="white-space: nowrap;">Account Ledger</a>
         <a href="{{ url_for('admin_inquiries') }}" class="btn btn-outline" style="white-space: nowrap;">Customer Inquiries</a>
         <a href="{{ url_for('admin_offline_booking') }}" class="btn btn-outline" style="white-space: nowrap;">+ Offline Booking</a>

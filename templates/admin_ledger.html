@@ -2,17 +2,17 @@
 {% block title %}Account Ledger - Pablo's Rentals{% endblock %}
 
 {% block content %}
-<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+<div class="header-group" style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h1>Account Ledger</h1>
         <p>Record of all completed transactions and payments collected.</p>
     </div>
-    <div style="display: flex; gap: 1rem;">
+    <div class="btn-group" style="display: flex; gap: 1rem;">
         <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
     </div>
 </div>
 
-<div class="card" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; background: #e8f5e9; border-color: #c8e6c9;">
+<div class="card header-group" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; background: #e8f5e9; border-color: #c8e6c9;">
     <h2 style="color: #2e7d32; margin: 0;">Total Revenue Collected</h2>
     <span style="font-size: 2rem; font-weight: bold; color: #2e7d32;">&#8377;{{ total_revenue }}</span>
 </div>

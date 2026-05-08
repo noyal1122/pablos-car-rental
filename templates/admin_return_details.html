@@ -2,12 +2,12 @@
 {% block title %}Return Details - Pablo's Rentals{% endblock %}
 
 {% block content %}
-<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+<div class="header-group" style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
     <div>
         <h1>Return Details</h1>
         <p>Verified details for Booking #{{ booking.id }}</p>
     </div>
-    <div style="display: flex; gap: 1rem;">
+    <div class="btn-group" style="display: flex; gap: 1rem;">
         <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
     </div>
 </div>
