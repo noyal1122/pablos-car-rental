@@ -82,7 +82,7 @@ def index():
         SELECT r.*, u.name as reviewer_name 
         FROM reviews r
         JOIN users u ON r.user_id = u.id
-        ORDER BY r.timestamp DESC LIMIT 6
+        ORDER BY r.timestamp DESC, r.id DESC LIMIT 6
     ''').fetchall()
     return render_template('index.html', cars=cars, reviews=reviews)
 
