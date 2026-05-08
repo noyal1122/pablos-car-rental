@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import shutil
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'pablo.db')
 
@@ -8,9 +9,13 @@ def get_db_connection():
     if os.environ.get('VERCEL'):
         db_path = '/tmp/pablo.db'
         if not os.path.exists(db_path):
-            conn = sqlite3.connect(db_path)
-            run_init_logic(conn)
-            conn.close()
+            # If we have a database in the repo, copy it to /tmp so we start with existing data
+            if os.path.exists(DB_PATH):
+                shutil.copy2(DB_PATH, db_path)
+            else:
+                conn = sqlite3.connect(db_path)
+                run_init_logic(conn)
+                conn.close()
             
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
