@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Return Details - Pablo's Rentals{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h1>Return Details</h1>
+        <p>Verified details for Booking #{{ booking.id }}</p>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+    <!-- Condition Info -->
+    <div class="card">
+        <h3>Vehicle Condition & Usage</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Customer</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.user_name }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Car</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.car_name }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Usage</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.km_run }} km ({{ booking.extra_km }} extra)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Fuel</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_fuel }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Exterior</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_exterior }}</td>
+            </tr>
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Interior</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_interior }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 0.5rem 0;"><strong>Verified At</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_verified_at }}</td>
+            </tr>
+        </table>
+        
+        <div style="margin-top: 1.5rem;">
+            <strong>Notes:</strong>
+            <p style="background: var(--bg-color); padding: 0.8rem; border-radius: 4px; margin-top: 0.5rem;">
+                {{ booking.return_notes or 'No notes provided.' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="card">
+        <h3>Return Photos</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+            {% for side in ['front', 'back', 'right', 'left'] %}
+            {% set photo_key = 'return_photo_' ~ side %}
+            {% if booking[photo_key] %}
+            <div>
+                <span style="font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.2rem;">{{ side|title }}</span>
+                <a href="{{ url_for('static', filename='images/' ~ booking[photo_key]) }}" target="_blank">
+                    <img src="{{ url_for('static', filename='images/' ~ booking[photo_key]) }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-color);">
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

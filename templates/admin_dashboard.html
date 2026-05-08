@@ -153,6 +153,12 @@
                         {% endif %}
                     </td>
                     <td style="padding: 0.5rem; text-align: center;">
+                        {% if booking.return_verified %}
+                        <a href="{{ url_for('admin_return_details', booking_id=booking.id) }}" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-right: 0.3rem;">
+                            View Return
+                        </a>
+                        {% endif %}
+                        
                         {% if not booking.return_verified and booking.status != 'cancelled' %}
                         <a href="{{ url_for('admin_cancel_booking', booking_id=booking.id) }}" 
                            class="btn" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; background: #fff; color: #dc3545; border: 1px solid #dc3545;"

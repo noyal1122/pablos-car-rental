@@ -727,6 +727,26 @@ def admin_ledger():
     return render_template('admin_ledger.html', transactions=transactions, total_revenue=total_revenue)
 
 
+@app.route('/admin/booking/return_details/<int:booking_id>')
+def admin_return_details(booking_id):
+    if not g.user or g.user['role'] != 'admin':
+        return redirect(url_for('login'))
+        
+    booking = g.db.execute('''
+        SELECT b.*, c.name as car_name, u.name as user_name 
+        FROM bookings b 
+        JOIN cars c ON b.car_id = c.id 
+        JOIN users u ON b.user_id = u.id
+        WHERE b.id = ?
+    ''', (booking_id,)).fetchone()
+    
+    if not booking or not booking['return_verified']:
+        flash('Return details not found or not yet verified.', 'error')
+        return redirect(url_for('admin_dashboard'))
+        
+    return render_template('admin_return_details.html', booking=booking)
+
+
 if __name__ == '__main__':
     from database import init_db
     init_db()
