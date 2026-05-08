@@ -4,12 +4,24 @@ import os
 DB_PATH = os.path.join(os.path.dirname(__file__), 'pablo.db')
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    db_path = DB_PATH
+    if os.environ.get('VERCEL'):
+        db_path = '/tmp/pablo.db'
+        if not os.path.exists(db_path):
+            conn = sqlite3.connect(db_path)
+            run_init_logic(conn)
+            conn.close()
+            
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
     conn = get_db_connection()
+    run_init_logic(conn)
+    conn.close()
+
+def run_init_logic(conn):
     c = conn.cursor()
 
     # Users Table
@@ -194,7 +206,6 @@ def init_db():
         c.executemany("INSERT INTO reviews (user_id, rating, content) VALUES (?, ?, ?)", reviews_data)
 
     conn.commit()
-    conn.close()
 
 if __name__ == '__main__':
     init_db()

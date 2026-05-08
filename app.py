@@ -36,8 +36,9 @@ def sync_ntp():
         # Interval: 1 minute
         time.sleep(60)
 
-ntp_thread = threading.Thread(target=sync_ntp, daemon=True)
-ntp_thread.start()
+if not os.environ.get('VERCEL'):
+    ntp_thread = threading.Thread(target=sync_ntp, daemon=True)
+    ntp_thread.start()
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_pablo_key'
@@ -746,6 +747,9 @@ def admin_return_details(booking_id):
         
     return render_template('admin_return_details.html', booking=booking)
 
+
+# Export for Vercel
+application = app
 
 if __name__ == '__main__':
     from database import init_db
