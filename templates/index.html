@@ -160,7 +160,7 @@
             if(data.success) {
                 document.getElementById('review-form-container').style.display = 'none';
                 document.getElementById('review-success-msg').style.display = 'block';
-                setTimeout(() => window.location.reload(), 2000);
+                setTimeout(() => window.location.reload(), 500);
             } else {
                 alert(data.error);
                 document.getElementById('submit-review-btn').innerText = 'Submit Review';
