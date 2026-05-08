@@ -6,3 +6,5 @@ instance/
 .DS_Store
 pablo.db
 static/images/returns/
+
+static/images/payments/

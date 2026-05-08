@@ -70,6 +70,8 @@ def init_db():
             return_photo_right TEXT,
             return_photo_left TEXT,
             return_verified_at TIMESTAMP,
+            payment_collected INTEGER DEFAULT 0,
+            payment_proof TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY(user_id) REFERENCES users(id),
             FOREIGN KEY(car_id) REFERENCES cars(id)
@@ -123,6 +125,8 @@ def init_db():
         'return_photo_right': 'TEXT',
         'return_photo_left':  'TEXT',
         'return_verified_at': 'TIMESTAMP',
+        'payment_collected':  'INTEGER DEFAULT 0',
+        'payment_proof':      'TEXT',
     }
     for col, definition in booking_new_cols.items():
         if col not in existing_booking_cols:

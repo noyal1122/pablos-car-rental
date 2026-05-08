@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Customer Inquiries - Pablo's Rentals{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h1>Customer Inquiries</h1>
+        <p>View and manage all customer chats and inquiries.</p>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline" style="white-space: nowrap;">&larr; Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="card">
+    <ul style="list-style: none; padding: 0; margin-top: 1rem;">
+        {% for u in users %}
+        <li style="border-bottom: 1px solid var(--border-color); padding: 0.75rem 0; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>{{ u.name }}</strong>
+                <br><span style="font-size: 0.85rem; color: #666;">{{ u.email }} &bull; {{ u.phone }}</span>
+            </div>
+            <a href="{{ url_for('admin_chat', user_id=u.id) }}" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">View Chat</a>
+        </li>
+        {% endfor %}
+        {% if not users %}
+        <li style="color: #666; padding: 1rem 0;">No registered customers yet.</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

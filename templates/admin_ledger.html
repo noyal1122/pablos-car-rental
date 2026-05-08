@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Account Ledger - Pablo's Rentals{% endblock %}
+
+{% block content %}
+<div style="margin-top: 2rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+        <h1>Account Ledger</h1>
+        <p>Record of all completed transactions and payments collected.</p>
+    </div>
+    <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; background: #e8f5e9; border-color: #c8e6c9;">
+    <h2 style="color: #2e7d32; margin: 0;">Total Revenue Collected</h2>
+    <span style="font-size: 2rem; font-weight: bold; color: #2e7d32;">&#8377;{{ total_revenue }}</span>
+</div>
+
+<div class="card">
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: var(--bg-color); border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.6rem;">Booking ID</th>
+                    <th style="padding: 0.6rem;">Customer</th>
+                    <th style="padding: 0.6rem;">Car</th>
+                    <th style="padding: 0.6rem;">Dates</th>
+                    <th style="padding: 0.6rem;">Amount</th>
+                    <th style="padding: 0.6rem; text-align: center;">Payment Proof</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem;">#{{ t.id }}</td>
+                    <td style="padding: 0.6rem;">{{ t.user_name }}</td>
+                    <td style="padding: 0.6rem;">{{ t.car_name }}</td>
+                    <td style="padding: 0.6rem;">{{ t.pickup_date }} to {{ t.drop_date }}</td>
+                    <td style="padding: 0.6rem; font-weight: bold; color: #28a745;">&#8377;{{ t.total_amount }}</td>
+                    <td style="padding: 0.6rem; text-align: center;">
+                        {% if t.payment_proof %}
+                        <a href="{{ url_for('static', filename='images/payments/' ~ t.payment_proof) }}" target="_blank" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">
+                            View Proof
+                        </a>
+                        {% else %}
+                        <span style="font-size: 0.8rem; color: #666;">No Proof</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if not transactions %}
+        <p style="text-align: center; margin-top: 1.5rem; color: #666;">No transactions recorded yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

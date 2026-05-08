@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Mark Payment Collected - Pablo's Rentals{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto;">
+    <h2>Upload Payment Proof</h2>
+    <p>Booking #{{ booking.id }} - {{ booking.user_name }}</p>
+
+    <div class="card" style="margin-top: 1rem;">
+        <p><strong>Car:</strong> {{ booking.car_name }}</p>
+        <p><strong>Total Amount Due:</strong> <span style="font-size: 1.2rem; color: #28a745; font-weight: bold;">&#8377;{{ booking.total_amount }}</span></p>
+
+        <form action="{{ url_for('admin_booking_payment', booking_id=booking.id) }}" method="POST" enctype="multipart/form-data" style="margin-top: 2rem;">
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="proof_image" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Upload Payment Screenshot / Proof (Required):</label>
+                <input type="file" name="proof_image" id="proof_image" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;" required>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-primary" style="background: #28a745; border-color: #28a745;">Mark as Paid</button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

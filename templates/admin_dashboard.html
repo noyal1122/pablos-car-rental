@@ -8,6 +8,8 @@
         <p>Manage fleet, view bookings, and reply to customer inquiries.</p>
     </div>
     <div style="display: flex; gap: 1rem;">
+        <a href="{{ url_for('admin_ledger') }}" class="btn btn-outline" style="white-space: nowrap;">Account Ledger</a>
+        <a href="{{ url_for('admin_inquiries') }}" class="btn btn-outline" style="white-space: nowrap;">Customer Inquiries</a>
         <a href="{{ url_for('admin_offline_booking') }}" class="btn btn-outline" style="white-space: nowrap;">+ Offline Booking</a>
         <a href="{{ url_for('admin_add_car') }}" class="btn btn-primary" style="white-space: nowrap;">+ Add New Car</a>
     </div>
@@ -157,6 +159,12 @@
                            onclick="return confirm('Cancel booking #{{ booking.id }}?');">
                             Cancel
                         </a>
+                        {% elif booking.return_verified and not booking.payment_collected %}
+                        <a href="{{ url_for('admin_booking_payment', booking_id=booking.id) }}" class="btn btn-primary" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; background: #28a745; border-color: #28a745;">
+                            Mark Paid
+                        </a>
+                        {% elif booking.return_verified and booking.payment_collected %}
+                        <span style="font-size: 0.85rem; color: #28a745; font-weight: bold;">&#10003; Paid</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -203,22 +211,4 @@
     </div>
 </div>
 
-<!-- Customer Inquiries -->
-<div class="card">
-    <h2>Customer Inquiries</h2>
-    <ul style="list-style: none; padding: 0; margin-top: 1rem;">
-        {% for u in users %}
-        <li style="border-bottom: 1px solid var(--border-color); padding: 0.75rem 0; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <strong>{{ u.name }}</strong>
-                <br><span style="font-size: 0.85rem; color: #666;">{{ u.email }} &bull; {{ u.phone }}</span>
-            </div>
-            <a href="{{ url_for('admin_chat', user_id=u.id) }}" class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.85rem;">View Chat</a>
-        </li>
-        {% endfor %}
-        {% if not users %}
-        <li style="color: #666; padding: 1rem 0;">No registered customers yet.</li>
-        {% endif %}
-    </ul>
-</div>
 {% endblock %}

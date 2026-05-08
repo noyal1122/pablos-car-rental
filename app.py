@@ -349,6 +349,14 @@ def api_reviews_add():
 
 # --- Admin Routes ---
 
+@app.route('/admin/inquiries')
+def admin_inquiries():
+    if not g.user or g.user['role'] != 'admin':
+        return redirect(url_for('login'))
+        
+    users = g.db.execute('SELECT * FROM users WHERE role = "customer"').fetchall()
+    return render_template('admin_inquiries.html', users=users)
+
 @app.route('/admin')
 def admin_dashboard():
     if not g.user or g.user['role'] != 'admin':
@@ -663,6 +671,60 @@ def admin_cancel_booking(booking_id):
         flash(f'Booking #{booking_id} has been cancelled by Admin.', 'success')
     
     return redirect(url_for('admin_dashboard'))
+
+
+@app.route('/admin/booking/payment/<int:booking_id>', methods=['GET', 'POST'])
+def admin_booking_payment(booking_id):
+    if not g.user or g.user['role'] != 'admin':
+        return redirect(url_for('login'))
+        
+    booking = g.db.execute('''
+        SELECT b.*, c.name as car_name, u.name as user_name 
+        FROM bookings b 
+        JOIN cars c ON b.car_id = c.id 
+        JOIN users u ON b.user_id = u.id
+        WHERE b.id = ?
+    ''', (booking_id,)).fetchone()
+    
+    if not booking:
+        flash('Booking not found.', 'error')
+        return redirect(url_for('admin_dashboard'))
+        
+    if request.method == 'POST':
+        proof_file = request.files.get('proof_image')
+        filename = ''
+        if proof_file and proof_file.filename:
+            import werkzeug.utils
+            import uuid
+            ext = proof_file.filename.rsplit('.', 1)[1].lower() if '.' in proof_file.filename else 'png'
+            filename = f"payment_{booking_id}_{uuid.uuid4().hex[:8]}.{ext}"
+            upload_dir = os.path.join(os.path.dirname(__file__), 'static', 'images', 'payments')
+            os.makedirs(upload_dir, exist_ok=True)
+            proof_file.save(os.path.join(upload_dir, filename))
+            
+        g.db.execute('UPDATE bookings SET payment_collected = 1, payment_proof = ? WHERE id = ?', (filename, booking_id))
+        g.db.commit()
+        flash('Payment marked as collected and proof saved.', 'success')
+        return redirect(url_for('admin_dashboard'))
+        
+    return render_template('admin_payment_proof.html', booking=booking)
+
+@app.route('/admin/ledger')
+def admin_ledger():
+    if not g.user or g.user['role'] != 'admin':
+        return redirect(url_for('login'))
+        
+    transactions = g.db.execute('''
+        SELECT b.*, c.name as car_name, u.name as user_name 
+        FROM bookings b 
+        JOIN cars c ON b.car_id = c.id 
+        JOIN users u ON b.user_id = u.id
+        WHERE b.payment_collected = 1
+        ORDER BY b.drop_date DESC
+    ''').fetchall()
+    
+    total_revenue = sum(t['total_amount'] for t in transactions)
+    return render_template('admin_ledger.html', transactions=transactions, total_revenue=total_revenue)
 
 
 if __name__ == '__main__':
