@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="card" style="max-width: 850px; margin: 2rem auto; padding: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center;
+    <div class="header-group" style="display: flex; justify-content: space-between; align-items: center;
                 margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
         <h2>&#128663; Car Return Verification</h2>
         <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back</a>
@@ -22,7 +22,7 @@
         <!-- Editable Dates -->
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
             <p style="font-size: 0.85rem; color: #e67e22; font-weight: 600; margin-bottom: 0.5rem;">&#9998; Edit dates below if the rental was extended</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; align-items: end;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; align-items: end;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="pickup_date" style="font-size: 0.85rem;">Pickup Date</label>
                     <input type="date" id="pickup_date" name="pickup_date" class="form-control"
@@ -44,7 +44,7 @@
     <!-- Verification Form -->
     <form method="POST" id="returnForm">
 
-        <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem;">
+        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             <!-- Left Column: KM & Condition -->
             <div>
                 <!-- KM Section -->
@@ -178,7 +178,7 @@
             <textarea id="return_notes" name="return_notes" class="form-control" rows="2" placeholder="Damage remarks, bargaining notes, etc..."></textarea>
         </div>
 
-        <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
+        <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap; margin-top: 1rem;">
             <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">Cancel</a>
             <button type="submit" class="btn btn-primary" style="padding: 0.6rem 2rem;">&#10003; Confirm &amp; Complete</button>
         </div>

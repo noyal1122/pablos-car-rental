@@ -15,7 +15,7 @@
                 <label for="proof_image" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Upload Payment Screenshot / Proof (Required):</label>
                 <input type="file" name="proof_image" id="proof_image" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color); border-radius: 4px;" required>
             </div>
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
                 <button type="submit" class="btn btn-primary" style="background: #28a745; border-color: #28a745;">Mark as Paid</button>
                 <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">Cancel</a>
             </div>

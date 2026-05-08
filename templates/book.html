@@ -24,12 +24,12 @@
             <input type="text" id="vehicle" class="form-control" value="{{ car.name }}" readonly>
         </div>
         
-        <div style="display: flex; gap: 1rem;">
-            <div class="form-group" style="flex: 1;">
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="flex: 1; min-width: 140px;">
                 <label for="pickup_date">Pickup Date</label>
                 <input type="date" id="pickup_date" name="pickup_date" class="form-control" required onchange="calculate()">
             </div>
-            <div class="form-group" style="flex: 1;">
+            <div class="form-group" style="flex: 1; min-width: 140px;">
                 <label for="drop_date">Drop Date</label>
                 <input type="date" id="drop_date" name="drop_date" class="form-control" required onchange="calculate()">
             </div>
@@ -52,9 +52,9 @@
             <span style="font-family: monospace; font-size: 1.1rem;">noelpbiju-1@oksbi</span>
         </div>
         
-        <div style="display: flex; gap: 1rem;">
-            <button type="submit" class="btn btn-primary" style="flex: 1;">Confirm Booking</button>
-            <a href="https://wa.me/917025328233" target="_blank" class="btn btn-success" style="background-color: #25D366; border:none; flex: 1; text-align: center;">Enquiry via WhatsApp</a>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; min-width: 140px;">Confirm Booking</button>
+            <a href="https://wa.me/917025328233" target="_blank" class="btn btn-success" style="background-color: #25D366; border:none; flex: 1; min-width: 140px; text-align: center;">Enquiry via WhatsApp</a>
         </div>
     </form>
 </div>
