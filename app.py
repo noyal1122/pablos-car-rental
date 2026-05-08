@@ -2,8 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import get_db_connection
 from datetime import datetime
+try:
+    from zoneinfo import ZoneInfo
+except ImportError:
+    from backports.zoneinfo import ZoneInfo
 import os, uuid, base64
 import socket, struct, time, threading
+
+IST = ZoneInfo('Asia/Kolkata')
 
 ntp_offset = 0.0
 
@@ -45,8 +51,13 @@ app.secret_key = 'super_secret_pablo_key'
 
 @app.route('/api/time')
 def api_time():
-    # Return the current correct time in seconds since epoch
-    return jsonify({'correct_time_ms': (time.time() + ntp_offset) * 1000})
+    # Return the current IST time in milliseconds since epoch
+    now_ist = datetime.now(IST)
+    return jsonify({
+        'correct_time_ms': now_ist.timestamp() * 1000,
+        'ist_time': now_ist.strftime('%Y-%m-%d %H:%M:%S'),
+        'timezone': 'Asia/Kolkata'
+    })
 
 @app.before_request
 def before_request():
@@ -201,8 +212,9 @@ def book(car_id):
 from datetime import timedelta
 
 def get_corrected_time_str():
-    corrected = datetime.now() + timedelta(seconds=ntp_offset)
-    return corrected.strftime('%Y-%m-%d %H:%M:%S')
+    """Return current IST time as a formatted string for DB storage."""
+    now_ist = datetime.now(IST)
+    return now_ist.strftime('%Y-%m-%d %H:%M:%S')
 
 @app.route('/send_message', methods=['POST'])
 def send_message():
