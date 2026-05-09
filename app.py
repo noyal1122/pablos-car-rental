@@ -384,7 +384,7 @@ def admin_dashboard():
         JOIN cars c ON b.car_id = c.id 
         JOIN users u ON b.user_id = u.id
         WHERE b.status != 'cancelled'
-        ORDER BY b.created_at DESC
+        ORDER BY b.id DESC
     ''').fetchall()
 
     cancelled_bookings = g.db.execute('''
@@ -393,7 +393,7 @@ def admin_dashboard():
         JOIN cars c ON b.car_id = c.id 
         JOIN users u ON b.user_id = u.id
         WHERE b.status = 'cancelled'
-        ORDER BY b.created_at DESC
+        ORDER BY b.id DESC
     ''').fetchall()
 
     # Bookings that are active/pending and past their drop date — need return verification
@@ -403,7 +403,7 @@ def admin_dashboard():
         JOIN cars c ON b.car_id = c.id
         JOIN users u ON b.user_id = u.id
         WHERE b.return_verified = 0 AND b.status = 'confirmed'
-        ORDER BY b.drop_date ASC
+        ORDER BY b.id DESC
     ''').fetchall()
     
     return render_template('admin_dashboard.html', cars=cars, bookings=bookings,
