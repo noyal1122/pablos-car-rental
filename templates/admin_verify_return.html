@@ -11,7 +11,7 @@
 
     <!-- Booking Summary -->
     <div style="background: var(--bg-color); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; font-size: 0.95rem;">
+        <div class="summary-grid" style="font-size: 0.95rem;">
             <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
             <p><strong>Car:</strong> {{ booking.car_name }}</p>
             <p><strong>Customer:</strong> {{ booking.user_name }}</p>
@@ -22,7 +22,7 @@
         <!-- Editable Dates -->
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
             <p style="font-size: 0.85rem; color: #e67e22; font-weight: 600; margin-bottom: 0.5rem;">&#9998; Edit dates below if the rental was extended</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; align-items: end;">
+            <div class="input-grid" style="align-items: end;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="pickup_date" style="font-size: 0.85rem;">Pickup Date</label>
                     <input type="date" id="pickup_date" name="pickup_date" class="form-control"
@@ -33,7 +33,7 @@
                     <input type="date" id="drop_date" name="drop_date" class="form-control"
                            value="{{ booking.drop_date }}" onchange="calcAll()">
                 </div>
-                <div style="text-align: center;">
+                <div style="text-align: center; background: white; padding: 0.5rem; border-radius: 4px;">
                     <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">Days Used</span>
                     <p id="disp_days_top" style="font-size: 1.4rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ booking.total_days }}</p>
                 </div>
@@ -50,26 +50,26 @@
                 <!-- KM Section -->
                 <div style="background: #f0f4ff; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #c8d6f0;">
                     <h3 style="margin-bottom: 1rem; font-size: 1rem;">&#128663; Odometer &amp; KM Details</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
+                    <div class="input-grid">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label for="pickup_km">Pickup KM</label>
                             <input type="number" id="pickup_km" name="pickup_km" class="form-control"
                                    value="{{ booking.pickup_km or 0 }}" min="0" required oninput="calcAll()">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label for="drop_km">Drop KM</label>
                             <input type="number" id="drop_km" name="drop_km" class="form-control"
                                    placeholder="e.g. 43500" min="0" required oninput="calcAll()">
                         </div>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;
+                    <div style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem;
                                 background: white; padding: 1rem; border-radius: 6px; text-align: center;">
-                        <div>
+                        <div style="flex: 1;">
                             <span style="font-size: 0.8rem; color: #666; text-transform: uppercase;">KM Run</span>
                             <p id="disp_kmrun" style="font-size: 1.2rem; font-weight: 700; color: var(--primary-color); margin: 0;">0</p>
                         </div>
-                        <div>
+                        <div style="flex: 1;">
                             <span style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Extra KM</span>
                             <p id="disp_extrakm" style="font-size: 1.2rem; font-weight: 700; margin: 0;">0 km</p>
                         </div>
@@ -152,18 +152,18 @@
 
                 <!-- Live Camera Photos -->
                 <div style="background: #f8f8f8; border-radius: 8px; padding: 1.2rem; border: 1px solid var(--border-color);">
-                    <h3 style="margin-bottom: 0.5rem; font-size: 1rem;">&#128247; Live Car Photos</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">&#128247; Live Car Photos</h3>
+                    <div class="photo-grid">
                         {% for side in ['front', 'back', 'right', 'left'] %}
-                        <div style="text-align: center;">
-                            <div id="preview_{{ side }}" style="width: 100%; height: 100px; background: #eee; border-radius: 4px;
-                                        display: flex; align-items: center; justify-content: center; margin-bottom: 0.3rem;
-                                        overflow: hidden; border: 1px solid #ddd;">
+                        <div style="text-align: center; background: white; padding: 0.5rem; border-radius: 8px; border: 1px solid #eee;">
+                            <div id="preview_{{ side }}" style="width: 100%; height: 100px; background: #f0f0f0; border-radius: 4px;
+                                         display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;
+                                         overflow: hidden; border: 1px solid #ddd;">
                                 <span style="color: #999; font-size: 0.75rem;">{{ side|title }}</span>
                             </div>
                             <input type="file" id="cam_{{ side }}" accept="image/*" capture="environment" style="display:none;" onchange="previewPhoto('{{ side }}', this)">
                             <input type="hidden" name="photo_{{ side }}" id="photo_data_{{ side }}">
-                            <button type="button" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; width: 100%;" onclick="document.getElementById('cam_{{ side }}').click();">
+                            <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem; width: 100%;" onclick="document.getElementById('cam_{{ side }}').click();">
                                 Capture
                             </button>
                         </div>
