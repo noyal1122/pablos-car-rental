@@ -21,21 +21,24 @@
 
         <!-- Editable Dates -->
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-            <p style="font-size: 0.85rem; color: #e67e22; font-weight: 600; margin-bottom: 0.5rem;">&#9998; Edit dates below if the rental was extended</p>
+            <p style="font-size: 0.85rem; color: #e67e22; font-weight: 600; margin-bottom: 0.5rem;">&#9998; Edit dates
+                below if the rental was extended</p>
             <div class="input-grid" style="align-items: end;">
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="pickup_date" style="font-size: 0.85rem;">Pickup Date</label>
                     <input type="date" id="pickup_date" name="pickup_date" class="form-control"
-                           value="{{ booking.pickup_date }}" onchange="calcAll()">
+                        value="{{ booking.pickup_date }}" onchange="calcAll()">
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                     <label for="drop_date" style="font-size: 0.85rem;">Drop Date</label>
                     <input type="date" id="drop_date" name="drop_date" class="form-control"
-                           value="{{ booking.drop_date }}" onchange="calcAll()">
+                        value="{{ booking.drop_date }}" onchange="calcAll()">
                 </div>
                 <div style="text-align: center; background: white; padding: 0.5rem; border-radius: 4px;">
                     <span style="font-size: 0.75rem; color: #666; text-transform: uppercase;">Days Used</span>
-                    <p id="disp_days_top" style="font-size: 1.4rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{ booking.total_days }}</p>
+                    <p id="disp_days_top"
+                        style="font-size: 1.4rem; font-weight: 700; color: var(--primary-color); margin: 0;">{{
+                        booking.total_days }}</p>
                 </div>
             </div>
         </div>
@@ -44,22 +47,24 @@
     <!-- Verification Form -->
     <form method="POST" id="returnForm">
 
-        <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <div class="grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             <!-- Left Column: KM & Condition -->
             <div>
                 <!-- KM Section -->
-                <div style="background: #f0f4ff; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #c8d6f0;">
+                <div
+                    style="background: #f0f4ff; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #c8d6f0;">
                     <h3 style="margin-bottom: 1rem; font-size: 1rem;">&#128663; Odometer &amp; KM Details</h3>
                     <div class="input-grid">
                         <div class="form-group" style="margin-bottom: 0;">
                             <label for="pickup_km">Pickup KM</label>
                             <input type="number" id="pickup_km" name="pickup_km" class="form-control"
-                                   value="{{ booking.pickup_km or 0 }}" min="0" required oninput="calcAll()">
+                                value="{{ booking.pickup_km or 0 }}" min="0" required oninput="calcAll()">
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label for="drop_km">Drop KM</label>
                             <input type="number" id="drop_km" name="drop_km" class="form-control"
-                                   placeholder="e.g. 43500" min="0" required oninput="calcAll()">
+                                placeholder="e.g. 43500" min="0" required oninput="calcAll()">
                         </div>
                     </div>
 
@@ -67,7 +72,9 @@
                                 background: white; padding: 1rem; border-radius: 6px; text-align: center;">
                         <div style="flex: 1;">
                             <span style="font-size: 0.8rem; color: #666; text-transform: uppercase;">KM Run</span>
-                            <p id="disp_kmrun" style="font-size: 1.2rem; font-weight: 700; color: var(--primary-color); margin: 0;">0</p>
+                            <p id="disp_kmrun"
+                                style="font-size: 1.2rem; font-weight: 700; color: var(--primary-color); margin: 0;">0
+                            </p>
                         </div>
                         <div style="flex: 1;">
                             <span style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Extra KM</span>
@@ -113,75 +120,88 @@
             <!-- Right Column: Rate Details & Photos -->
             <div>
                 <!-- Rate Breakdown Section (Flexible Bargaining) -->
-                <div style="background: #fff9e6; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #ffeeba;">
+                <div
+                    style="background: #fff9e6; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; border: 1px solid #ffeeba;">
                     <h3 style="margin-bottom: 1rem; font-size: 1rem;">&#128176; Rate Details &amp; Bargaining</h3>
-                    
+
                     <div style="font-size: 0.9rem; line-height: 1.6;">
-                        <p style="font-size: 0.75rem; color: #856404; margin-bottom: 0.5rem;">* All amounts below are editable for bargaining.</p>
-                        
+                        <p style="font-size: 0.75rem; color: #856404; margin-bottom: 0.5rem;">* All amounts below are
+                            editable for bargaining.</p>
+
                         <!-- Base Charge -->
                         <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 0.8rem;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span id="rate_desc">Base Rate (<span class="days_text">{{ booking.total_days }}</span> days):</span>
-                                <input type="number" id="base_charge" class="form-control" style="width: 100px; text-align: right; padding: 0.2rem;" oninput="updateGrandTotal()">
+                                <span id="rate_desc">Base Rate (<span class="days_text">{{ booking.total_days }}</span>
+                                    days):</span>
+                                <input type="number" id="base_charge" class="form-control"
+                                    style="width: 100px; text-align: right; padding: 0.2rem;"
+                                    oninput="updateGrandTotal()">
                             </div>
                             <small style="color: #666;" id="rate_type_hint">Standard calculation...</small>
                         </div>
 
                         <!-- Extra KM Charge -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
                             <span>Extra KM (<span id="extra_km_text">0</span> km):</span>
-                            <input type="number" id="extra_km_charge" class="form-control" style="width: 100px; text-align: right; padding: 0.2rem;" oninput="updateGrandTotal()">
-                        </div>
-                        
-                        <!-- Round Off -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <label for="round_off" style="margin-bottom: 0;">Misc/Round Off (&#177;):</label>
-                            <input type="number" id="round_off" name="round_off" class="form-control" style="width: 100px; text-align: right; padding: 0.2rem;" value="0" oninput="updateGrandTotal()">
+                            <input type="number" id="extra_km_charge" class="form-control"
+                                style="width: 100px; text-align: right; padding: 0.2rem;" oninput="updateGrandTotal()">
                         </div>
 
-                        <div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 2px solid #856404; display: flex; justify-content: space-between; font-size: 1.2rem; align-items: center;">
+                        <!-- Damage Charges -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                            <span>Damage Charges (₹):</span>
+                            <input type="number" id="damage_charge" name="damage_charge" class="form-control"
+                                style="width: 100px; text-align: right; padding: 0.2rem;" value="0" min="0"
+                                oninput="updateGrandTotal()">
+                        </div>
+
+                        <!-- Low Fuel Penalty -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                            <span>Low Fuel Penalty (₹):</span>
+                            <input type="number" id="fuel_charge" name="fuel_charge" class="form-control"
+                                style="width: 100px; text-align: right; padding: 0.2rem;" value="0" min="0"
+                                oninput="updateGrandTotal()">
+                        </div>
+
+                        <!-- Round Off -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <label for="round_off" style="margin-bottom: 0;">Misc/Round Off (&#177;):</label>
+                            <input type="number" id="round_off" name="round_off" class="form-control"
+                                style="width: 100px; text-align: right; padding: 0.2rem;" value="0"
+                                oninput="updateGrandTotal()">
+                        </div>
+
+                        <div
+                            style="margin-top: 1rem; padding-top: 0.5rem; border-top: 2px solid #856404; display: flex; justify-content: space-between; font-size: 1.2rem; align-items: center;">
                             <strong>Final Bargained Total:</strong>
                             <div style="display: flex; align-items: center; gap: 0.3rem; color: #856404;">
-                                ₹<input type="number" id="final_total_input" name="final_total_input" class="form-control" 
-                                       style="width: 120px; text-align: right; font-size: 1.2rem; font-weight: 700; background: transparent; border: 1px solid #856404; color: #856404;" required>
+                                ₹<input type="number" id="final_total_input" name="final_total_input"
+                                    class="form-control"
+                                    style="width: 120px; text-align: right; font-size: 1.2rem; font-weight: 700; background: transparent; border: 1px solid #856404; color: #856404;"
+                                    required>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Live Camera Photos -->
-                <div style="background: #f8f8f8; border-radius: 8px; padding: 1.2rem; border: 1px solid var(--border-color);">
-                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">&#128247; Live Car Photos</h3>
-                    <div class="photo-grid">
-                        {% for side in ['front', 'back', 'right', 'left'] %}
-                        <div style="text-align: center; background: white; padding: 0.5rem; border-radius: 8px; border: 1px solid #eee;">
-                            <div id="preview_{{ side }}" style="width: 100%; height: 100px; background: #f0f0f0; border-radius: 4px;
-                                         display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;
-                                         overflow: hidden; border: 1px solid #ddd;">
-                                <span style="color: #999; font-size: 0.75rem;">{{ side|title }}</span>
-                            </div>
-                            <input type="file" id="cam_{{ side }}" accept="image/*" capture="environment" style="display:none;" onchange="previewPhoto('{{ side }}', this)">
-                            <input type="hidden" name="photo_{{ side }}" id="photo_data_{{ side }}">
-                            <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem; width: 100%;" onclick="document.getElementById('cam_{{ side }}').click();">
-                                Capture
-                            </button>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
+
             </div>
-        </div>
 
-        <div class="form-group" style="margin-top: 1.5rem;">
-            <label for="return_notes">Additional Notes (optional)</label>
-            <textarea id="return_notes" name="return_notes" class="form-control" rows="2" placeholder="Damage remarks, bargaining notes, etc..."></textarea>
-        </div>
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label for="return_notes">Additional Notes (optional)</label>
+                <textarea id="return_notes" name="return_notes" class="form-control" rows="2"
+                    placeholder="Damage remarks, bargaining notes, etc..."></textarea>
+            </div>
 
-        <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap; margin-top: 1rem;">
-            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">Cancel</a>
-            <button type="submit" class="btn btn-primary" style="padding: 0.6rem 2rem;">&#10003; Confirm &amp; Complete</button>
-        </div>
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; flex-wrap: wrap; margin-top: 1rem;">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="padding: 0.6rem 2rem;">&#10003; Confirm &amp;
+                    Complete</button>
+            </div>
     </form>
 </div>
 {% endblock %}
@@ -211,7 +231,7 @@
         const baseInput = document.getElementById('base_charge');
         const hint = document.getElementById('rate_type_hint');
         let standardBase = 0;
-        
+
         if (currentDays > 15) {
             standardBase = Math.round((monthlyRate / 30) * currentDays);
             hint.textContent = `Prorated Monthly: (₹${monthlyRate}/30) \u00d7 ${currentDays} days`;
@@ -219,7 +239,7 @@
             standardBase = dailyRate * currentDays;
             hint.textContent = `Daily Rate: ₹${dailyRate} \u00d7 ${currentDays} days`;
         }
-        
+
         // Auto-fill base if empty
         if (!baseInput.value) {
             baseInput.value = standardBase;
@@ -227,7 +247,7 @@
 
         // 3. Calculate KM Run & Extra Charges
         const pickupKm = parseInt(document.getElementById('pickup_km').value) || 0;
-        const dropKm   = parseInt(document.getElementById('drop_km').value) || 0;
+        const dropKm = parseInt(document.getElementById('drop_km').value) || 0;
         const freeKm = currentDays * 100;
 
         const kmRun = Math.max(dropKm - pickupKm, 0);
@@ -236,7 +256,7 @@
 
         document.getElementById('disp_kmrun').textContent = kmRun;
         document.getElementById('extra_km_text').textContent = extraKm;
-        
+
         const extraEl = document.getElementById('disp_extrakm');
         extraEl.textContent = extraKm + ' km';
         extraEl.style.color = extraKm > 0 ? '#dc3545' : '#28a745';
@@ -252,9 +272,11 @@
     function updateGrandTotal() {
         const base = parseInt(document.getElementById('base_charge').value) || 0;
         const extra = parseInt(document.getElementById('extra_km_charge').value) || 0;
+        const damage = parseInt(document.getElementById('damage_charge').value) || 0;
+        const fuel = parseInt(document.getElementById('fuel_charge').value) || 0;
         const round = parseInt(document.getElementById('round_off').value) || 0;
-        
-        const total = base + extra + round;
+
+        const total = base + extra + damage + fuel + round;
         document.getElementById('final_total_input').value = total;
     }
 
@@ -262,7 +284,7 @@
         const file = input.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const base64 = e.target.result;
             document.getElementById('photo_data_' + side).value = base64;
             const previewDiv = document.getElementById('preview_' + side);
@@ -271,6 +293,103 @@
         reader.readAsDataURL(file);
     }
 
-    window.onload = calcAll;
+    document.getElementById('returnForm').addEventListener('submit', function(e) {
+        if (this.checkValidity()) {
+            const bookingId = "{{ booking.id }}";
+            const userName = "{{ booking.user_name }}";
+            const userPhone = "{{ booking.user_phone }}";
+            const carName = "{{ booking.car_name }}";
+            
+            const pickupDate = document.getElementById('pickup_date').value;
+            const dropDate = document.getElementById('drop_date').value;
+            const totalDays = document.getElementById('disp_days_top').textContent;
+            
+            const pickupKm = document.getElementById('pickup_km').value;
+            const dropKm = document.getElementById('drop_km').value;
+            const kmRun = document.getElementById('disp_kmrun').textContent;
+            const extraKm = document.getElementById('disp_extrakm').textContent;
+            
+            const exterior = document.getElementById('return_exterior').value;
+            const interior = document.getElementById('return_interior').value;
+            const notes = document.getElementById('return_notes').value;
+            
+            const damage = parseInt(document.getElementById('damage_charge').value) || 0;
+            const fuel = parseInt(document.getElementById('fuel_charge').value) || 0;
+            const totalAmount = document.getElementById('final_total_input').value;
+            
+            let msg = "*PABLO'S CAR RENTAL - INVOICE*\n";
+            msg += "----------------------------------------\n";
+            msg += "*Invoice No:* #" + bookingId + "\n";
+            msg += "*Customer Name:* " + userName + "\n";
+            msg += "*Phone:* " + userPhone + "\n";
+            msg += "*Car Rented:* " + carName + "\n\n";
+            
+            msg += "*Rental Period:*\n";
+            msg += "• Pickup Date: " + pickupDate + "\n";
+            msg += "• Drop Date: " + dropDate + "\n";
+            msg += "• Total Duration: " + totalDays + " days\n\n";
+            
+            msg += "*Usage Details:*\n";
+            msg += "• Pickup Odometer: " + pickupKm + " km\n";
+            msg += "• Drop Odometer: " + dropKm + " km\n";
+            msg += "• Distance Run: " + kmRun + " km\n";
+            msg += "• Extra KM: " + extraKm + "\n\n";
+            
+            msg += "*Return Status:*\n";
+            msg += "• Exterior Condition: " + exterior + "\n";
+            msg += "• Interior Condition: " + interior + "\n";
+            
+            if (damage > 0 || fuel > 0) {
+                msg += "\n*Additional Charges:*\n";
+                if (damage > 0) {
+                    msg += "• Damage Charges: ₹" + damage + "\n";
+                }
+                if (fuel > 0) {
+                    msg += "• Low Fuel Charges: ₹" + fuel + "\n";
+                }
+            }
+            
+            if (notes.trim()) {
+                msg += "\n• Notes: " + notes + "\n";
+            }
+            
+            msg += "----------------------------------------\n";
+            msg += "*GRAND TOTAL: ₹" + totalAmount + "*\n";
+            msg += "----------------------------------------\n";
+            msg += "Thank you for choosing Pablo's Car Rental!\n";
+            msg += "Safe Travels!";
+            
+            let rawPhone = userPhone;
+            let whatsappPhone = rawPhone.replace(/\D/g, '');
+            if (whatsappPhone.startsWith('0')) {
+                whatsappPhone = whatsappPhone.replace(/^0+/, '');
+            }
+            if (whatsappPhone.length === 10) {
+                whatsappPhone = '91' + whatsappPhone;
+            }
+            
+            const url = "https://wa.me/" + whatsappPhone + "?text=" + encodeURIComponent(msg);
+            window.open(url, '_blank');
+        }
+    });
+
+    window.onload = function() {
+        calcAll();
+        
+        // Auto-suggest fuel penalty based on selected level
+        document.getElementById('return_fuel').addEventListener('change', function() {
+            const fuelChargeInput = document.getElementById('fuel_charge');
+            if (this.value === 'Empty') {
+                fuelChargeInput.value = 1000;
+            } else if (this.value === '1/4') {
+                fuelChargeInput.value = 500;
+            } else if (this.value === '1/2') {
+                fuelChargeInput.value = 250;
+            } else {
+                fuelChargeInput.value = 0;
+            }
+            updateGrandTotal();
+        });
+    };
 </script>
 {% endblock %}

@@ -7,7 +7,14 @@
         <h1>Return Details</h1>
         <p>Verified details for Booking #{{ booking.id }}</p>
     </div>
-    <div class="btn-group" style="display: flex; gap: 1rem;">
+    <div class="btn-group" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <button onclick="downloadReceipt()" class="btn btn-outline" style="border-color: #333; color: #333;">
+            <span style="margin-right: 5px;">&#128247;</span> Download as Image
+        </button>
+        <a href="{{ whatsapp_url }}" 
+           target="_blank" class="btn btn-primary" style="background-color: #25D366; border-color: #25D366;">
+            <span style="margin-right: 5px;">&#128172;</span> Send WhatsApp Bill
+        </a>
         <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
     </div>
 </div>
@@ -41,6 +48,22 @@
                 <td style="padding: 0.5rem 0;"><strong>Interior</strong></td>
                 <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_interior }}</td>
             </tr>
+            {% if booking.damage_charge and booking.damage_charge > 0 %}
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Damage Charges</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right; color: #dc3545; font-weight: 600;">₹{{ booking.damage_charge }}</td>
+            </tr>
+            {% endif %}
+            {% if booking.fuel_charge and booking.fuel_charge > 0 %}
+            <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.5rem 0;"><strong>Low Fuel Charges</strong></td>
+                <td style="padding: 0.5rem 0; text-align: right; color: #dc3545; font-weight: 600;">₹{{ booking.fuel_charge }}</td>
+            </tr>
+            {% endif %}
+            <tr style="border-bottom: 2px solid var(--primary-color);">
+                <td style="padding: 0.8rem 0;"><strong>Final Total Amount</strong></td>
+                <td style="padding: 0.8rem 0; text-align: right; font-size: 1.2rem; color: var(--primary-color);"><strong>₹{{ booking.total_amount }}</strong></td>
+            </tr>
             <tr>
                 <td style="padding: 0.5rem 0;"><strong>Verified At</strong></td>
                 <td style="padding: 0.5rem 0; text-align: right;">{{ booking.return_verified_at }}</td>
@@ -72,5 +95,111 @@
             {% endfor %}
         </div>
     </div>
+    <!-- Bill Receipt Section (Hidden/Styled for Capture) -->
+    <div id="receipt-capture" style="position: absolute; left: -9999px; width: 400px; background: white; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;">
+        <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px;">
+            <h2 style="margin: 0; color: #000;">PABLO'S CAR RENTAL</h2>
+            <p style="margin: 5px 0; font-size: 0.9rem; color: #666;">Premium Car Rental Services</p>
+            <p style="margin: 2px 0; font-size: 0.8rem; color: #888;">Contact: +91 9446140683</p>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span><strong>Invoice No:</strong> #{{ booking.id }}</span>
+                <span><strong>Date:</strong> {{ booking.return_verified_at.split(' ')[0] if booking.return_verified_at else '' }}</span>
+            </div>
+            <div style="margin-bottom: 5px;"><strong>Customer:</strong> {{ booking.user_name }}</div>
+            <div style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ booking.car_name }}</div>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background: #f4f4f4;">
+                    <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Description</th>
+                    <th style="padding: 8px; text-align: right; border: 1px solid #ddd;">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Customer</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.user_name }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Date</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.return_verified_at.split(' ')[0] if booking.return_verified_at else '' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Days</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.days if booking.days else 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Rate</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">₹{{ booking.rate if booking.rate else 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Extra KM</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.extra_km if booking.extra_km else '0' }} km</td>
+                </tr>
+                {% if booking.damage_charge and booking.damage_charge > 0 %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd; color: #dc3545;">Damage Charges</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right; color: #dc3545; font-weight: 600;">₹{{ booking.damage_charge }}</td>
+                </tr>
+                {% endif %}
+                {% if booking.fuel_charge and booking.fuel_charge > 0 %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd; color: #dc3545;">Low Fuel Charges</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right; color: #dc3545; font-weight: 600;">₹{{ booking.fuel_charge }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Total</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right; font-weight: bold;">₹{{ booking.total_amount }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Fuel Level</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.return_fuel }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;">Return Condition</td>
+                    <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">{{ booking.return_exterior }} / {{ booking.return_interior }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 10px; border-top: 2px solid #333; padding-top: 10px;">
+            <div style="font-size: 1.2rem; font-weight: bold;">TOTAL AMOUNT: ₹{{ booking.total_amount }}</div>
+            <p style="font-size: 0.8rem; color: #28a745; margin-top: 5px;">Status: Paid & Verified</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; font-size: 0.8rem; color: #999;">
+            <p>Thank you for choosing Pablo's Car Rental!</p>
+            <p>Safe Travels!</p>
+        </div>
+    </div>
 </div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function downloadReceipt() {
+    const element = document.getElementById('receipt-capture');
+    // Temporarily show element for capture
+    element.style.left = '0';
+    element.style.position = 'relative';
+    
+    html2canvas(element, {
+        scale: 2, // Higher quality
+        backgroundColor: "#ffffff"
+    }).then(canvas => {
+        // Reset element state
+        element.style.left = '-9999px';
+        element.style.position = 'absolute';
+        
+        const link = document.createElement('a');
+        link.download = 'pablo_receipt_{{ booking.id }}.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
+}
+</script>
 {% endblock %}

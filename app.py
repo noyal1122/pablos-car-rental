@@ -529,6 +529,8 @@ def admin_verify_return(booking_id):
         return_interior = request.form.get('return_interior', '')
         return_notes    = request.form.get('return_notes', '').strip()
         round_off       = int(request.form.get('round_off', 0) or 0)
+        damage_charge   = int(request.form.get('damage_charge', 0) or 0)
+        fuel_charge     = int(request.form.get('fuel_charge', 0) or 0)
 
         # Read (possibly edited) dates
         pickup_date = request.form.get('pickup_date', booking['pickup_date'])
@@ -585,6 +587,8 @@ def admin_verify_return(booking_id):
                 return_photo_back = ?,
                 return_photo_right = ?,
                 return_photo_left = ?,
+                damage_charge = ?,
+                fuel_charge = ?,
                 return_verified_at = CURRENT_TIMESTAMP
             WHERE id = ?
         ''', (pickup_date, drop_date, days_used, total_amount,
@@ -592,10 +596,11 @@ def admin_verify_return(booking_id):
               return_fuel, return_exterior, return_interior, return_notes,
               photo_filenames.get('front', ''), photo_filenames.get('back', ''),
               photo_filenames.get('right', ''), photo_filenames.get('left', ''),
+              damage_charge, fuel_charge,
               booking_id))
         g.db.commit()
         flash(f'Return verified. Final bargained amount: ₹{total_amount}', 'success')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_return_details', booking_id=booking_id))
 
     return render_template('admin_verify_return.html', booking=booking)
 
@@ -746,7 +751,7 @@ def admin_return_details(booking_id):
         return redirect(url_for('login'))
         
     booking = g.db.execute('''
-        SELECT b.*, c.name as car_name, u.name as user_name 
+        SELECT b.*, c.name as car_name, u.name as user_name, u.phone as user_phone
         FROM bookings b 
         JOIN cars c ON b.car_id = c.id 
         JOIN users u ON b.user_id = u.id
@@ -757,7 +762,58 @@ def admin_return_details(booking_id):
         flash('Return details not found or not yet verified.', 'error')
         return redirect(url_for('admin_dashboard'))
         
-    return render_template('admin_return_details.html', booking=booking)
+    # Sanitize phone number for WhatsApp: keep only digits
+    raw_phone = booking['user_phone'] if booking['user_phone'] else ''
+    whatsapp_phone = ''.join(c for c in raw_phone if c.isdigit())
+    if whatsapp_phone.startswith('0'):
+        whatsapp_phone = whatsapp_phone.lstrip('0')
+    if len(whatsapp_phone) == 10:
+        whatsapp_phone = '91' + whatsapp_phone
+        
+    import urllib.parse
+    
+    msg = (
+        f"*PABLO'S CAR RENTAL - INVOICE*\n"
+        f"----------------------------------------\n"
+        f"*Invoice No:* #{booking['id']}\n"
+        f"*Customer Name:* {booking['user_name']}\n"
+        f"*Phone:* {booking['user_phone']}\n"
+        f"*Car Rented:* {booking['car_name']}\n\n"
+        f"*Rental Period:*\n"
+        f"• Pickup Date: {booking['pickup_date']}\n"
+        f"• Drop Date: {booking['drop_date']}\n"
+        f"• Total Duration: {booking['total_days']} days\n\n"
+        f"*Usage Details:*\n"
+        f"• Pickup Odometer: {booking['pickup_km']} km\n"
+        f"• Drop Odometer: {booking['drop_km']} km\n"
+        f"• Distance Run: {booking['km_run']} km\n"
+        f"• Extra KM: {booking['extra_km']} km\n\n"
+        f"*Return Status:*\n"
+        f"• Exterior Condition: {booking['return_exterior']}\n"
+        f"• Interior Condition: {booking['return_interior']}\n"
+    )
+    
+    if (booking['damage_charge'] and booking['damage_charge'] > 0) or (booking['fuel_charge'] and booking['fuel_charge'] > 0):
+        msg += "\n*Additional Charges:*\n"
+        if booking['damage_charge'] and booking['damage_charge'] > 0:
+            msg += f"• Damage Charges: ₹{booking['damage_charge']}\n"
+        if booking['fuel_charge'] and booking['fuel_charge'] > 0:
+            msg += f"• Low Fuel Charges: ₹{booking['fuel_charge']}\n"
+            
+    if booking['return_notes']:
+        msg += f"\n• Notes: {booking['return_notes']}\n"
+        
+    msg += (
+        f"----------------------------------------\n"
+        f"*GRAND TOTAL: ₹{booking['total_amount']}*\n"
+        f"----------------------------------------\n"
+        f"Thank you for choosing Pablo's Car Rental!\n"
+        f"Safe Travels!"
+    )
+    
+    whatsapp_url = f"https://wa.me/{whatsapp_phone}?text={urllib.parse.quote(msg)}"
+        
+    return render_template('admin_return_details.html', booking=booking, whatsapp_url=whatsapp_url)
 
 
 # Export for Vercel

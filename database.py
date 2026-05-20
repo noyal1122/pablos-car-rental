@@ -2,7 +2,16 @@ import sqlite3
 import os
 import shutil
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'pablo.db')
+# Priority: 1. Env Var (Docker) 2. Network Share 3. Local
+ENV_DB_PATH = os.environ.get('DB_PATH')
+NETWORK_DB_PATH = r'\\192.168.18.205\ssd\pablo\pablo.db'
+
+if ENV_DB_PATH:
+    DB_PATH = ENV_DB_PATH
+elif os.path.exists(NETWORK_DB_PATH):
+    DB_PATH = NETWORK_DB_PATH
+else:
+    DB_PATH = os.path.join(os.path.dirname(__file__), 'pablo.db')
 
 def get_db_connection():
     db_path = DB_PATH
@@ -144,6 +153,8 @@ def run_init_logic(conn):
         'return_verified_at': 'TIMESTAMP',
         'payment_collected':  'INTEGER DEFAULT 0',
         'payment_proof':      'TEXT',
+        'damage_charge':      'INTEGER DEFAULT 0',
+        'fuel_charge':        'INTEGER DEFAULT 0',
     }
     for col, definition in booking_new_cols.items():
         if col not in existing_booking_cols:
